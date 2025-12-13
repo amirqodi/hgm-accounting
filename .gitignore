@@ -1,0 +1,37 @@
+# Binaries
+/bin
+*.dll
+*.so
+*.dylib
+
+
+# Go build
+*.test
+*.out
+*.db
+
+# Env files
+.env
+.env.local
+
+
+# IDE
+.vscode/
+.idea/
+
+
+# OS
+.DS_Store
+Thumbs.db
+
+
+# Logs
+*.log
+
+
+# Air
+.air.toml
+/tmp/
+
+# Electeron
+electron
