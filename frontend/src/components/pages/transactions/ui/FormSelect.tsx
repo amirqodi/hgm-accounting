@@ -50,7 +50,7 @@ export default function AnimatedDropdownSelect({
               className={cn(
                 "h-11 w-full px-3 rounded-lg border border-border/20 bg-box text-foreground flex items-center justify-between",
                 fieldState.error ? "border-destructive" : "",
-                "focus:ring-2 focus:ring-primary focus:outline-none disabled:opacity-50"
+                "focus:ring-2 focus:ring-primary focus:outline-none disabled:opacity-50",
               )}
             >
               <span>
@@ -82,17 +82,14 @@ export default function AnimatedDropdownSelect({
                   transition={{ duration: 0.2 }}
                   className="absolute z-20 mt-1 w-full bg-box border border-border rounded-lg shadow-lg overflow-hidden"
                 >
-                  {/* input سرچ فقط اگر گزینه‌ها بیشتر از 10 باشد */}
-                  {options.length > 10 && (
-                    <div className="p-2 border-b border-border">
-                      <input
-                        type="text"
-                        placeholder="جستجو..."
-                        onChange={(e) => onSearch?.(e.target.value)}
-                        className="w-full px-2 py-1 text-sm rounded-md border border-border bg-background focus:outline-none"
-                      />
-                    </div>
-                  )}
+                  <div className="p-2 border-b border-border">
+                    <input
+                      type="text"
+                      placeholder="جستجو..."
+                      onChange={(e) => onSearch?.(e.target.value)}
+                      className="w-full px-2 py-1 text-sm rounded-md border border-border bg-background focus:outline-none"
+                    />
+                  </div>
 
                   {/* لیست آپشن‌ها */}
                   <ul className="max-h-60 overflow-y-auto">

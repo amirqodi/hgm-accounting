@@ -5,6 +5,7 @@ import { useNotification } from "@/components/main/NotificationProvider";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Cookies from "js-cookie";
+import { formatNumber } from "@/utils/formatters";
 
 export default function ShareHolderPage() {
   const [search, setSearch] = useState("");
@@ -35,7 +36,7 @@ export default function ShareHolderPage() {
             "Content-Type": "application/json",
           },
           credentials: "include",
-        }
+        },
       );
 
       if (!res.ok) {
@@ -84,7 +85,10 @@ export default function ShareHolderPage() {
             accessor: "share_percentage",
             formatNumber: true,
           },
-          { header: "مقدار سرمایه", accessor: "amount", formatNumber: true },
+          {
+            header: "مقدار سرمایه",
+            accessor: (row) => formatNumber(row.amount),
+          },
         ]}
         actions={[
           {

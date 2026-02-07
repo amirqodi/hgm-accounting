@@ -36,9 +36,7 @@ export default function ContactField() {
       setLoading(true);
       try {
         const token = Cookies.get("auth_token");
-        const url = `${API_URL}${
-          sources[contactType]
-        }&limit=10&search=${encodeURIComponent(searchTerm)}`;
+        const url = `${API_URL}${sources[contactType]}&limit=10&search=${searchTerm}`;
 
         const res = await fetch(url, {
           method: "GET",
@@ -63,7 +61,7 @@ export default function ContactField() {
           value: x.id,
           label: x.first_name
             ? `${x.first_name} ${x.last_name ?? ""}`.trim()
-            : x.title ?? `#${x.id}`,
+            : (x.title ?? `#${x.id}`),
           type: "user",
         }));
 
@@ -76,7 +74,7 @@ export default function ContactField() {
         setLoading(false);
       }
     },
-    [API_URL, contactType, notify]
+    [API_URL, contactType, notify],
   );
 
   // هر بار نوع مخاطب عوض شد -> پاکسازی و گرفتن دیتا
@@ -106,8 +104,8 @@ export default function ContactField() {
 
       {/* انتخاب مخاطب */}
       {contactType && (
-        <div className="flex items-end gap-3">
-          <div className="flex-1">
+        <div className="flex-1">
+          <div className="flex items-end gap-3">
             <AnimatedDropdownSelect
               name="contact_id"
               control={control}
@@ -116,24 +114,23 @@ export default function ContactField() {
                 loading
                   ? "در حال بارگذاری..."
                   : options.length
-                  ? "انتخاب کنید"
-                  : "موردی یافت نشد"
+                    ? "انتخاب کنید"
+                    : "موردی یافت نشد"
               }
               options={options}
               disabled={loading || options.length === 0}
               onSearch={(term) => fetchContacts(term)}
             />
+            {/* ✅ فقط وقتی مشتری یا فروشنده انتخاب شده باشه */}
+            {(contactType === "customer" || contactType === "vendor") && (
+              <Link
+                href="/contacts/add"
+                className="h-fit px-4 py-2 bg-primary text-white rounded-lg shadow hover:bg-primary/90 transition"
+              >
+                افزودن
+              </Link>
+            )}
           </div>
-
-          {/* ✅ فقط وقتی مشتری یا فروشنده انتخاب شده باشه */}
-          {(contactType === "customer" || contactType === "vendor") && (
-            <Link
-              href="/contacts/add"
-              className="h-fit px-4 py-2 bg-primary text-white rounded-lg shadow hover:bg-primary/90 transition"
-            >
-              افزودن
-            </Link>
-          )}
         </div>
       )}
     </div>

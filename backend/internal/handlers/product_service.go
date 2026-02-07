@@ -28,11 +28,6 @@ func CreateProductService(c *fiber.Ctx) error {
 		p.Code = generateProductCode() // تابع برای تولید کد
 	}
 
-	if p.Stock == nil {
-		var zero int64 = 0
-		p.Stock = &zero
-	}
-
 	// اعتبارسنجی فیلدها
 	if p.Name == "" {
 		errorsMap["name"] = append(errorsMap["name"], "نام محصول یا خدمت نمی‌تواند خالی باشد")

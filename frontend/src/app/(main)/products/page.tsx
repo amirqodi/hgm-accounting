@@ -6,6 +6,7 @@ import ConfirmModal from "@/components/main/ConfirmModal";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useNotification } from "@/components/main/NotificationProvider";
+import { formatNumber } from "@/utils/formatters";
 
 type ProductService = {
   id: number;
@@ -44,7 +45,7 @@ export default function ProductServicePage() {
             "Content-Type": "application/json",
           },
           credentials: "include",
-        }
+        },
       );
 
       if (!res.ok) {
@@ -83,10 +84,14 @@ export default function ProductServicePage() {
         columns={[
           { header: "کد محصول", accessor: "code" },
           { header: "نام", accessor: "name" },
-          { header: "قیمت خرید", accessor: "buying_price", formatNumber: true },
+          {
+            header: "قیمت خرید",
+            accessor: (row) => formatNumber(row.buying_price ?? 0),
+            formatNumber: true,
+          },
           {
             header: "قیمت فروش",
-            accessor: "selling_price",
+            accessor: (row) => formatNumber(row.selling_price),
             formatNumber: true,
           },
           { header: "موجودی", accessor: "stock" },

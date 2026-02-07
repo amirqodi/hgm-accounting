@@ -36,7 +36,7 @@ export default function EditBankAccountPage() {
               Authorization: token ? `Bearer ${token}` : "",
             },
             credentials: "include",
-          }
+          },
         );
 
         if (!res.ok) notify("error", "خطا در دریافت اطلاعات حساب");
@@ -49,6 +49,8 @@ export default function EditBankAccountPage() {
         } else {
           notify("error", "مشکلی پیش آمد ❌");
         }
+      } finally {
+        setLoading(false);
       }
     };
 

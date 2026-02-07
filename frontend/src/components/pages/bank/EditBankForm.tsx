@@ -111,7 +111,7 @@ export default function EditBankAccountForm() {
           },
           credentials: "include",
           body: JSON.stringify(cleaned),
-        }
+        },
       );
 
       if (!res.ok) {

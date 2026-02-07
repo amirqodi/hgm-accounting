@@ -6,6 +6,7 @@ import ConfirmModal from "@/components/main/ConfirmModal";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useNotification } from "@/components/main/NotificationProvider";
+import { formatNumber } from "@/utils/formatters";
 
 type Service = {
   id: number;
@@ -42,7 +43,7 @@ export default function ServicesPage() {
             "Content-Type": "application/json",
           },
           credentials: "include",
-        }
+        },
       );
 
       if (!res.ok) {
@@ -83,7 +84,7 @@ export default function ServicesPage() {
           { header: "نام", accessor: "name" },
           {
             header: "قیمت فروش",
-            accessor: "selling_price",
+            accessor: (row) => formatNumber(row.selling_price),
             formatNumber: true,
           },
         ]}

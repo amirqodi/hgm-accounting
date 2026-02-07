@@ -6,6 +6,7 @@ import ConfirmModal from "@/components/main/ConfirmModal";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useNotification } from "@/components/main/NotificationProvider";
+import { formatNumber } from "@/utils/formatters";
 
 export default function Page() {
   const [page, setPage] = useState(1);
@@ -38,7 +39,7 @@ export default function Page() {
             "Content-Type": "application/json",
           },
           credentials: "include",
-        }
+        },
       );
 
       if (!res.ok) {
@@ -83,7 +84,7 @@ export default function Page() {
             accessor: (row) => `${row.first_name} ${row.last_name}`,
           },
           { header: "شماره تلفن", accessor: "phone_number" },
-          { header: "موجودی", accessor: "balance", formatNumber: true },
+          { header: "موجودی", accessor: (row) => formatNumber(row.amount) },
         ]}
         actions={[
           {

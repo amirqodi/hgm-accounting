@@ -222,33 +222,8 @@ func GetBalanceSheet(db *gorm.DB) (*BalanceSheet, error) {
 	var shareHolders float64
 	db.Model(&models.Contact{}).Where("type = ?", "shareholder").Select("COALESCE(SUM(amount),0)").Scan(&shareHolders)
 
-	// Retained earnings = net profit (income - expense), excluding asset purchases
-	var incomePaid, subIncomePaid, expensePaid, subExpensePaid float64
-
-	db.Model(&models.Transaction{}).
-		Where("transaction_type = ? AND is_paid = ? AND product_id IS NULL",
-			"income", true).
-		Select("COALESCE(SUM(amount),0)").Scan(&incomePaid)
-
-	db.Model(&models.SubTransaction{}).
-		Joins("JOIN transactions ON transactions.id = sub_transactions.transaction_id").
-		Where("sub_transactions.is_paid = ? AND transactions.transaction_type = ? AND transactions.product_id IS NULL",
-			true, "income").
-		Select("COALESCE(SUM(sub_transactions.amount),0)").Scan(&subIncomePaid)
-
-	// --- Expense transactions (only paid) excluding product purchases ---
-	db.Model(&models.Transaction{}).
-		Where("transaction_type = ? AND is_paid = ? AND product_id IS NULL",
-			"expense", true).
-		Select("COALESCE(SUM(amount),0)").Scan(&expensePaid)
-
-	db.Model(&models.SubTransaction{}).
-		Joins("JOIN transactions ON transactions.id = sub_transactions.transaction_id").
-		Where("sub_transactions.is_paid = ? AND transactions.transaction_type = ? AND transactions.product_id IS NULL",
-			true, "expense").
-		Select("COALESCE(SUM(sub_transactions.amount),0)").Scan(&subExpensePaid)
 	result.Equity.Capital = shareHolders
-	result.Equity.RetainedEarnings = (incomePaid + subIncomePaid) - (expensePaid + subExpensePaid)
+	result.Equity.RetainedEarnings = result.Assets.Total - shareHolders - result.Liabilities.Total
 	result.Equity.Total = result.Equity.Capital + result.Equity.RetainedEarnings
 
 	// --- جمع کل‌ها ---
